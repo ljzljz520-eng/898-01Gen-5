@@ -74,6 +74,28 @@ export function filterCourses(
     filtered = filtered.filter(c => c.type === filters.type);
   }
   
+  if (filters.teacher) {
+    filtered = filtered.filter(c => c.teacher === filters.teacher);
+  }
+  
+  if (filters.workload !== 'all') {
+    filtered = filtered.filter(c => {
+      if (filters.workload === 'low') return c.avgWorkload <= 2;
+      if (filters.workload === 'medium') return c.avgWorkload > 2 && c.avgWorkload <= 4;
+      if (filters.workload === 'high') return c.avgWorkload > 4;
+      return true;
+    });
+  }
+  
+  if (filters.examMethod !== 'all') {
+    filtered = filtered.filter(c => {
+      if (filters.examMethod === 'easy') return c.avgExamMethod <= 2;
+      if (filters.examMethod === 'medium') return c.avgExamMethod > 2 && c.avgExamMethod <= 4;
+      if (filters.examMethod === 'hard') return c.avgExamMethod > 4;
+      return true;
+    });
+  }
+  
   if (filters.searchQuery.trim()) {
     const query = filters.searchQuery.toLowerCase();
     filtered = filtered.filter(
@@ -98,6 +120,12 @@ export function filterCourses(
   }
   
   return filtered;
+}
+
+export function getAllTeachers(): string[] {
+  const courses = getAllCourses();
+  const teachers = new Set(courses.map(c => c.teacher));
+  return Array.from(teachers).sort();
 }
 
 export function getCourseTypeLabel(type: string): string {

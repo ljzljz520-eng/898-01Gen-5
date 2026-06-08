@@ -3,6 +3,7 @@ import { Home } from "@/pages/Home";
 import { CourseDetail } from "@/pages/CourseDetail";
 import { NewReview } from "@/pages/NewReview";
 import About from "@/pages/About";
+import { AdminReview } from "@/pages/AdminReview";
 import { Navbar } from "@/components/Navbar";
 import { Toast } from "@/components/Toast";
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       { path: "/course/:courseId", element: <CourseDetail /> },
       { path: "/review/new", element: <NewReview /> },
       { path: "/about", element: <About /> },
+      { path: "/admin/review", element: <AdminReview /> },
     ],
   },
 ]);

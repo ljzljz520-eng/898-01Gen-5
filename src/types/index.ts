@@ -61,6 +61,9 @@ export interface FilterOptions {
   type: CourseType | 'all';
   sortBy: 'rating' | 'review_count' | 'latest';
   searchQuery: string;
+  teacher: string;
+  workload: 'all' | 'low' | 'medium' | 'high';
+  examMethod: 'all' | 'easy' | 'medium' | 'hard';
 }
 
 export type ReviewFormData = {

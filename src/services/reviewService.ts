@@ -95,6 +95,62 @@ export function reportReview(reviewId: string, reason: string): boolean {
   return true;
 }
 
+export function getPendingReviews(): Review[] {
+  const reviews = getAllReviews();
+  return reviews
+    .filter(r => r.status === 'pending')
+    .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+}
+
+export function getRejectedReviews(): Review[] {
+  const reviews = getAllReviews();
+  return reviews
+    .filter(r => r.status === 'rejected')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+export function approveReview(reviewId: string): boolean {
+  const reviews = getAllReviews();
+  const reviewIndex = reviews.findIndex(r => r.id === reviewId);
+  
+  if (reviewIndex !== -1 && reviews[reviewIndex].status === 'pending') {
+    reviews[reviewIndex].status = 'approved';
+    setReviewsToStorage(reviews);
+    return true;
+  }
+  
+  return false;
+}
+
+export function rejectReview(reviewId: string, reason: string): boolean {
+  const reviews = getAllReviews();
+  const reviewIndex = reviews.findIndex(r => r.id === reviewId);
+  
+  if (reviewIndex !== -1) {
+    reviews[reviewIndex].status = 'rejected';
+    setReviewsToStorage(reviews);
+    console.log(`Review ${reviewId} rejected for: ${reason}`);
+    return true;
+  }
+  
+  return false;
+}
+
+export function getReviewStats(): {
+  total: number;
+  approved: number;
+  pending: number;
+  rejected: number;
+} {
+  const reviews = getAllReviews();
+  return {
+    total: reviews.length,
+    approved: reviews.filter(r => r.status === 'approved').length,
+    pending: reviews.filter(r => r.status === 'pending').length,
+    rejected: reviews.filter(r => r.status === 'rejected').length,
+  };
+}
+
 export function getSemestersWithReviewCount(courseId: string): Array<{
   semester: string;
   count: number;

@@ -20,19 +20,28 @@ interface CourseState {
   setFilterType: (type: CourseType | 'all') => void;
   setSortBy: (sortBy: 'rating' | 'review_count' | 'latest') => void;
   setSearchQuery: (query: string) => void;
+  setTeacher: (teacher: string) => void;
+  setWorkload: (workload: 'all' | 'low' | 'medium' | 'high') => void;
+  setExamMethod: (examMethod: 'all' | 'easy' | 'medium' | 'hard') => void;
+  resetFilters: () => void;
   clearSelectedCourse: () => void;
   refreshCourses: () => void;
 }
+
+const initialFilters: FilterOptions = {
+  type: 'all',
+  sortBy: 'rating',
+  searchQuery: '',
+  teacher: '',
+  workload: 'all',
+  examMethod: 'all',
+};
 
 export const useCourseStore = create<CourseState>((set, get) => ({
   courses: [],
   filteredCourses: [],
   selectedCourse: null,
-  filters: {
-    type: 'all',
-    sortBy: 'rating',
-    searchQuery: '',
-  },
+  filters: initialFilters,
   isLoading: false,
   error: null,
 
@@ -74,6 +83,29 @@ export const useCourseStore = create<CourseState>((set, get) => ({
     const filters = { ...get().filters, searchQuery };
     const filteredCourses = filterCourses(get().courses, filters);
     set({ filters, filteredCourses });
+  },
+
+  setTeacher: (teacher: string) => {
+    const filters = { ...get().filters, teacher };
+    const filteredCourses = filterCourses(get().courses, filters);
+    set({ filters, filteredCourses });
+  },
+
+  setWorkload: (workload: 'all' | 'low' | 'medium' | 'high') => {
+    const filters = { ...get().filters, workload };
+    const filteredCourses = filterCourses(get().courses, filters);
+    set({ filters, filteredCourses });
+  },
+
+  setExamMethod: (examMethod: 'all' | 'easy' | 'medium' | 'hard') => {
+    const filters = { ...get().filters, examMethod };
+    const filteredCourses = filterCourses(get().courses, filters);
+    set({ filters, filteredCourses });
+  },
+
+  resetFilters: () => {
+    const filteredCourses = filterCourses(get().courses, initialFilters);
+    set({ filters: initialFilters, filteredCourses });
   },
 
   clearSelectedCourse: () => {

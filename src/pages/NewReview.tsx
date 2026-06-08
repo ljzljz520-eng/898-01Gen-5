@@ -5,7 +5,9 @@ import {
   BookOpen, 
   Calendar as CalendarIcon,
   Send,
-  Info
+  Info,
+  Database,
+  AlertTriangle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useUiStore } from '../store/useUiStore';
@@ -130,10 +132,11 @@ export const NewReview: React.FC = () => {
 
       if (result.success) {
         refreshCourses();
+        const isPending = result.warnings && result.warnings.length > 0;
         showToast(
-          result.warnings && result.warnings.length > 0
-            ? '评价已提交，将在审核通过后展示'
-            : '评价发布成功！',
+          isPending
+            ? '评价已提交，将在审核通过后展示（仅保存在本地浏览器）'
+            : '评价发布成功！（仅保存在本地浏览器）',
           'success'
         );
         navigate(`/course/${selectedCourse}`);
@@ -379,6 +382,18 @@ export const NewReview: React.FC = () => {
                   <li>• 请客观评价，避免极端情绪化表达</li>
                   <li>• 评价将经过审核后展示</li>
                 </ul>
+              </div>
+
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <h4 className="font-medium text-blue-800 mb-2 flex items-center gap-2">
+                  <Database className="w-4 h-4" />
+                  数据存储说明
+                </h4>
+                <p className="text-sm text-blue-700">
+                  <AlertTriangle className="w-4 h-4 inline mr-1 text-amber-500" />
+                  您的评价将仅保存在当前浏览器的本地存储（localStorage）中，
+                  不会上传到服务器。清除浏览器数据或更换设备后，评价将无法恢复。
+                </p>
               </div>
 
               {selectedCourseData && (

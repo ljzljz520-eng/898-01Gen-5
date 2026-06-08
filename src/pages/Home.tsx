@@ -5,6 +5,7 @@ import { useCourseStore } from '../store/useCourseStore';
 import { SearchBar } from '../components/SearchBar';
 import { FilterTabs } from '../components/FilterTabs';
 import { SortSelector } from '../components/SortSelector';
+import { AdvancedFilters } from '../components/AdvancedFilters';
 import { CourseCard } from '../components/CourseCard';
 import { Empty } from '../components/Empty';
 
@@ -17,6 +18,10 @@ export const Home: React.FC = () => {
     setSearchQuery,
     setFilterType,
     setSortBy,
+    setTeacher,
+    setWorkload,
+    setExamMethod,
+    resetFilters,
   } = useCourseStore();
 
   useEffect(() => {
@@ -98,7 +103,17 @@ export const Home: React.FC = () => {
           <FilterTabs
             activeType={filters.type}
             onChange={setFilterType}
-            className="mb-8"
+            className="mb-4"
+          />
+
+          <AdvancedFilters
+            teacher={filters.teacher}
+            workload={filters.workload}
+            examMethod={filters.examMethod}
+            onTeacherChange={setTeacher}
+            onWorkloadChange={setWorkload}
+            onExamMethodChange={setExamMethod}
+            onReset={resetFilters}
           />
 
           {isLoading ? (
